@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guess the Classmate!</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 2em;
+      max-width: 600px;
+      margin: auto;
+      text-align: center;
+    }
+    .question {
+      font-size: 1.5em;
+      margin: 2em 0;
+    }
+    .btn-group button {
+      font-size: 1.2em;
+      margin: 0.5em;
+      padding: 0.7em 1.5em;
+    }
+  </style>
+</head>
+<body>
+  <h1>Who's the Classmate?</h1>
+  <div id="game">
+    <div class="question" id="question"></div>
+    <div class="btn-group">
+      <button onclick="answer('yes')">Yes</button>
+      <button onclick="answer('no')">No</button>
+      <button onclick="answer('maybe')">Maybe</button>
+    </div>
+  </div>
+  <div id="result" style="display:none; font-size: 1.3em; margin-top: 2em;"></div>
+
+  <script>
+    const classmates = [
+      { name: "Liam", girl: false, glasses: true, pet: false },
+      { name: "Maya", girl: true, glasses: false, pet: true },
+      { name: "Noa", girl: true, glasses: true, pet: false },
+      { name: "Omer", girl: false, glasses: false, pet: true }
+    ];
+
+    const questions = [
+      { key: "girl", text: "Is the classmate a girl?" },
+      { key: "glasses", text: "Does the classmate wear glasses?" },
+      { key: "pet", text: "Do they have a pet?" }
+    ];
+
+    let currentQuestion = 0;
+    let candidates = [...classmates];
+
+    function showQuestion() {
+      if (currentQuestion >= questions.length || candidates.length <= 1) {
+        endGame();
+        return;
+      }
+      document.getElementById("question").innerText = questions[currentQuestion].text;
+    }
+
+    function answer(choice) {
+      const key = questions[currentQuestion].key;
+      if (choice === 'yes') candidates = candidates.filter(c => c[key]);
+      if (choice === 'no') candidates = candidates.filter(c => !c[key]);
+      currentQuestion++;
+      showQuestion();
+    }
+
+    function endGame() {
+      document.getElementById("game").style.display = "none";
+      const result = document.getElementById("result");
+      if (candidates.length === 1) {
+        result.innerText = `Is it ${candidates[0].name}?`;
+      } else if (candidates.length > 1) {
+        result.innerText = `It could be: ${candidates.map(c => c.name).join(", ")}`;
+      } else {
+        result.innerText = "Hmm... I couldn't guess!";
+      }
+      result.style.display = "block";
+    }
+
+    showQuestion();
+  </script>
+</body>
+</html>
