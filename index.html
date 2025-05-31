@@ -164,11 +164,34 @@
 
   <script>
     const classmates = [
-      { name: "ליאם", girl: false, glasses: true, pet: false, lightHair: false, lightEyes: true, image: "liam.jpg" },
-      { name: "מאיה", girl: true, glasses: false, pet: true, lightHair: true, lightEyes: false, image: "maya.jpg" },
-      { name: "נועה", girl: true, glasses: true, pet: false, lightHair: false, lightEyes: true, image: "noa.jpg" },
-      { name: "עומר", girl: false, glasses: false, pet: true, lightHair: true, lightEyes: true, image: "omer.jpg" }
-    ];
+  {
+    name: "יערה",
+    girl: true,
+    glasses: false,
+    pet: true,
+    lightHair: false,
+    lightEyes: false,
+    image: "yaara_cropped_circle.png"
+  },
+  {
+    name: "יעל",
+    girl: true,
+    glasses: false,
+    pet: false,
+    lightHair: false,
+    lightEyes: false,
+    image: "yael_cropped_circle.png"
+  },
+  {
+    name: "איילת",
+    girl: true,
+    glasses: false,
+    pet: true,
+    lightHair: true,
+    lightEyes: true,
+    image: "ayelet_cropped_circle.png"
+  }
+];
 
     const questionTemplates = {
       glasses: {
@@ -241,7 +264,7 @@
       const restartBtn = document.getElementById("restart-btn");
 
       if (candidates.length === 1) {
-        result.innerText = `האם זה ${candidates[0].name}?`;
+        result.innerText = `האם חשבתם על ${candidates[0].name}? 🎉🥳`;
         imageContainer.innerHTML = `<img src="${candidates[0].image}" alt="${candidates[0].name}" />`;
       } else if (candidates.length > 1) {
         result.innerText = `יכול להיות שזה: ${candidates.map(c => c.name).join(", ")}`;
