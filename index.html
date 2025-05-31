@@ -60,14 +60,23 @@
       padding: 0.6em 1.5em;
       border: none;
       border-radius: 12px;
-      background-color: #00cec9;
-      color: white;
+      background-color: #55efc4;
+      color: #2d3436;
       cursor: pointer;
-      transition: background-color 0.3s ease;
+      transition: transform 0.2s ease, background-color 0.3s ease;
+    }
+
+    .btn-group button:nth-child(1) {
+      background-color: #74b9ff;
+    }
+
+    .btn-group button:nth-child(2) {
+      background-color: #fab1a0;
     }
 
     .btn-group button:hover {
-      background-color: #01a3a4;
+      transform: scale(1.1);
+      filter: brightness(1.1);
     }
 
     #result {
@@ -81,6 +90,31 @@
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
       max-width: 80%;
     }
+
+    #image-container {
+      margin-top: 1em;
+    }
+
+    #image-container img {
+      max-width: 150px;
+      border-radius: 50%;
+    }
+
+    #restart-btn {
+      margin-top: 1em;
+      font-size: 1em;
+      padding: 0.5em 1.2em;
+      background-color: #6c5ce7;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    #restart-btn:hover {
+      transform: scale(1.05);
+    }
   </style>
 </head>
 <body>
@@ -93,13 +127,17 @@
     </div>
   </div>
   <div id="result" style="display:none;"></div>
+  <div id="image-container" style="text-align:center;"></div>
+  <div style="text-align:center;">
+    <button id="restart-btn" style="display:none;" onclick="restartGame()">נסה שוב</button>
+  </div>
 
   <script>
     const classmates = [
-      { name: "ליאם", girl: false, glasses: true, pet: false },
-      { name: "מאיה", girl: true, glasses: false, pet: true },
-      { name: "נועה", girl: true, glasses: true, pet: false },
-      { name: "עומר", girl: false, glasses: false, pet: true }
+      { name: "ליאם", girl: false, glasses: true, pet: false, lightHair: false, lightEyes: true, image: "liam.jpg" },
+      { name: "מאיה", girl: true, glasses: false, pet: true, lightHair: true, lightEyes: false, image: "maya.jpg" },
+      { name: "נועה", girl: true, glasses: true, pet: false, lightHair: false, lightEyes: true, image: "noa.jpg" },
+      { name: "עומר", girl: false, glasses: false, pet: true, lightHair: true, lightEyes: true, image: "omer.jpg" }
     ];
 
     const questionTemplates = {
@@ -110,6 +148,14 @@
       pet: {
         male: "האם יש לו חיית מחמד?",
         female: "האם יש לה חיית מחמד?"
+      },
+      lightHair: {
+        male: "האם השיער שלו בהיר?",
+        female: "האם השיער שלה בהיר?"
+      },
+      lightEyes: {
+        male: "האם העיניים שלו בהירות?",
+        female: "האם העיניים שלה בהירות?"
       }
     };
 
@@ -121,7 +167,7 @@
       const questionElement = document.getElementById("question");
 
       if (currentQuestion === 0) {
-        questionElement.innerText = "האם זה בן או בת? (בת)";
+        questionElement.innerText = "האם זו בת?";
         return;
       }
 
@@ -138,7 +184,7 @@
     }
 
     function answer(choice) {
-      const keyOrder = ["girl", "glasses", "pet"];
+      const keyOrder = ["girl", "glasses", "pet", "lightHair", "lightEyes"];
       const key = keyOrder[currentQuestion];
 
       if (key === "girl") {
@@ -155,14 +201,33 @@
     function endGame() {
       document.getElementById("game").style.display = "none";
       const result = document.getElementById("result");
+      const imageContainer = document.getElementById("image-container");
+      const restartBtn = document.getElementById("restart-btn");
+
       if (candidates.length === 1) {
         result.innerText = `האם זה ${candidates[0].name}?`;
+        imageContainer.innerHTML = `<img src="${candidates[0].image}" alt="${candidates[0].name}" />`;
       } else if (candidates.length > 1) {
         result.innerText = `יכול להיות שזה: ${candidates.map(c => c.name).join(", ")}`;
+        imageContainer.innerHTML = "";
       } else {
         result.innerText = "לא הצלחתי לנחש! אולי תשאל שוב?";
+        imageContainer.innerHTML = "";
       }
+
       result.style.display = "block";
+      restartBtn.style.display = "inline-block";
+    }
+
+    function restartGame() {
+      currentQuestion = 0;
+      candidates = [...classmates];
+      isGirl = null;
+      document.getElementById("game").style.display = "flex";
+      document.getElementById("result").style.display = "none";
+      document.getElementById("image-container").innerHTML = "";
+      document.getElementById("restart-btn").style.display = "none";
+      showQuestion();
     }
 
     showQuestion();
