@@ -1,88 +1,94 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="he">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Guess the Classmate!</title>
+  <title>נחש את החבר מהכיתה!</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Assistant:wght@700&display=swap');
 
     body {
-      font-family: 'Comic Neue', cursive;
+      font-family: 'Assistant', sans-serif;
       padding: 2em;
-      max-width: 700px;
+      max-width: 600px;
       margin: auto;
       text-align: center;
-      background: linear-gradient(to right, #f9f7ff, #d0e8ff);
-      color: #333;
+      direction: rtl;
+      background: linear-gradient(to bottom, #fdfbfb, #ebedee);
+      color: #2c3e50;
     }
 
     h1 {
       font-size: 2.5em;
-      color: #4a90e2;
-      margin-bottom: 0.5em;
-      text-shadow: 2px 2px #fff;
+      color: #2d98da;
+      margin-bottom: 1em;
     }
 
     .question {
-      font-size: 1.8em;
+      font-size: 1.6em;
       margin: 2em 0;
-      background-color: #ffffff;
       padding: 1em;
-      border-radius: 15px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      background: #ffffff;
+      border: 2px solid #dcdde1;
+      border-radius: 20px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .btn-group {
+      display: flex;
+      justify-content: center;
+      gap: 1em;
     }
 
     .btn-group button {
       font-size: 1.2em;
-      margin: 0.5em;
-      padding: 0.7em 1.5em;
+      padding: 0.7em 2em;
       border: none;
-      border-radius: 10px;
-      background-color: #ffd966;
-      color: #444;
+      border-radius: 12px;
+      background-color: #00cec9;
+      color: white;
       cursor: pointer;
       transition: background-color 0.3s ease;
     }
 
     .btn-group button:hover {
-      background-color: #ffe599;
+      background-color: #01a3a4;
     }
 
     #result {
-      font-size: 1.5em;
+      font-size: 1.4em;
       margin-top: 2em;
       background-color: #fff;
       padding: 1em;
       border-radius: 15px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border: 2px solid #dcdde1;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     }
   </style>
 </head>
 <body>
-  <h1>Who's the Classmate?</h1>
+  <h1>נחש מי החבר!</h1>
   <div id="game">
     <div class="question" id="question"></div>
     <div class="btn-group">
-      <button onclick="answer('yes')">Yes</button>
-      <button onclick="answer('no')">No</button>
-      <button onclick="answer('maybe')">Maybe</button>
+      <button onclick="answer('yes')">כן</button>
+      <button onclick="answer('no')">לא</button>
     </div>
   </div>
   <div id="result" style="display:none;"></div>
 
   <script>
     const classmates = [
-      { name: "Liam", girl: false, glasses: true, pet: false },
-      { name: "Maya", girl: true, glasses: false, pet: true },
-      { name: "Noa", girl: true, glasses: true, pet: false },
-      { name: "Omer", girl: false, glasses: false, pet: true }
+      { name: "ליאם", girl: false, glasses: true, pet: false },
+      { name: "מאיה", girl: true, glasses: false, pet: true },
+      { name: "נועה", girl: true, glasses: true, pet: false },
+      { name: "עומר", girl: false, glasses: false, pet: true }
     ];
 
     const questions = [
-      { key: "girl", text: "Is the classmate a girl?" },
-      { key: "glasses", text: "Does the classmate wear glasses?" },
-      { key: "pet", text: "Do they have a pet?" }
+      { key: "girl", text: "האם זה בן או בת? (בת)" },
+      { key: "glasses", text: "האם הוא/היא מרכיב/ה משקפיים?" },
+      { key: "pet", text: "האם יש לו/לה חיית מחמד?" }
     ];
 
     let currentQuestion = 0;
@@ -108,11 +114,11 @@
       document.getElementById("game").style.display = "none";
       const result = document.getElementById("result");
       if (candidates.length === 1) {
-        result.innerText = `Is it ${candidates[0].name}?`;
+        result.innerText = `האם זה ${candidates[0].name}?`;
       } else if (candidates.length > 1) {
-        result.innerText = `It could be: ${candidates.map(c => c.name).join(", ")}`;
+        result.innerText = `יכול להיות שזה: ${candidates.map(c => c.name).join(", ")}`;
       } else {
-        result.innerText = "Hmm... I couldn't guess!";
+        result.innerText = "לא הצלחתי לנחש! אולי תשאל שוב?";
       }
       result.style.display = "block";
     }
