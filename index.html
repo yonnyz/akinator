@@ -9,40 +9,55 @@
 
     body {
       font-family: 'Assistant', sans-serif;
-      padding: 2em;
-      max-width: 600px;
-      margin: auto;
-      text-align: center;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
       direction: rtl;
-      background: linear-gradient(to bottom, #fdfbfb, #ebedee);
+      background: url('background.jpg') no-repeat center center fixed;
+      background-size: cover;
       color: #2c3e50;
     }
 
     h1 {
       font-size: 2.5em;
       color: #2d98da;
-      margin-bottom: 1em;
+      text-align: center;
+      margin: 1em 0 0.5em;
+    }
+
+    #game {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      flex: 1;
+      padding: 0 1em 2em;
     }
 
     .question {
-      font-size: 1.6em;
-      margin: 2em 0;
-      padding: 1em;
+      font-size: 1.4em;
+      margin: 1em auto;
+      padding: 0.6em 1em;
       background: #ffffff;
-      border: 2px solid #dcdde1;
-      border-radius: 20px;
+      max-width: 80%;
+      border-radius: 20px 20px 0 20px;
+      border: 1px solid #dcdde1;
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      text-align: right;
     }
 
     .btn-group {
       display: flex;
       justify-content: center;
       gap: 1em;
+      margin-top: 1em;
     }
 
     .btn-group button {
       font-size: 1.2em;
-      padding: 0.7em 2em;
+      padding: 0.6em 1.5em;
       border: none;
       border-radius: 12px;
       background-color: #00cec9;
@@ -57,17 +72,19 @@
 
     #result {
       font-size: 1.4em;
-      margin-top: 2em;
+      text-align: center;
+      margin: 2em auto;
       background-color: #fff;
       padding: 1em;
       border-radius: 15px;
       border: 2px solid #dcdde1;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      max-width: 80%;
     }
   </style>
 </head>
 <body>
-  <h1>נחש מי החבר!</h1>
+  <h1>חישבו על מישהו מהכיתה!</h1>
   <div id="game">
     <div class="question" id="question"></div>
     <div class="btn-group">
@@ -85,27 +102,52 @@
       { name: "עומר", girl: false, glasses: false, pet: true }
     ];
 
-    const questions = [
-      { key: "girl", text: "האם זה בן או בת? (בת)" },
-      { key: "glasses", text: "האם הוא/היא מרכיב/ה משקפיים?" },
-      { key: "pet", text: "האם יש לו/לה חיית מחמד?" }
-    ];
+    const questionTemplates = {
+      glasses: {
+        male: "האם הוא מרכיב משקפיים?",
+        female: "האם היא מרכיבה משקפיים?"
+      },
+      pet: {
+        male: "האם יש לו חיית מחמד?",
+        female: "האם יש לה חיית מחמד?"
+      }
+    };
 
     let currentQuestion = 0;
     let candidates = [...classmates];
+    let isGirl = null;
 
     function showQuestion() {
-      if (currentQuestion >= questions.length || candidates.length <= 1) {
+      const questionElement = document.getElementById("question");
+
+      if (currentQuestion === 0) {
+        questionElement.innerText = "האם זה בן או בת? (בת)";
+        return;
+      }
+
+      const keys = Object.keys(questionTemplates);
+      const key = keys[currentQuestion - 1];
+
+      if (!key || candidates.length <= 1) {
         endGame();
         return;
       }
-      document.getElementById("question").innerText = questions[currentQuestion].text;
+
+      const genderKey = isGirl ? 'female' : 'male';
+      questionElement.innerText = questionTemplates[key][genderKey];
     }
 
     function answer(choice) {
-      const key = questions[currentQuestion].key;
+      const keyOrder = ["girl", "glasses", "pet"];
+      const key = keyOrder[currentQuestion];
+
+      if (key === "girl") {
+        isGirl = choice === 'yes';
+      }
+
       if (choice === 'yes') candidates = candidates.filter(c => c[key]);
       if (choice === 'no') candidates = candidates.filter(c => !c[key]);
+
       currentQuestion++;
       showQuestion();
     }
